@@ -1,4 +1,4 @@
-# holdr jquery plugin - very alpha
+# holdr jquery plugin - very alpha, work in progress
 
 ## Overview
 replaces empty img src tags with placeholder images
