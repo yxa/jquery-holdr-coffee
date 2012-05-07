@@ -1,10 +1,10 @@
 ( ($) ->
   $.fn.holdr = (options) ->
-    settings = $.extend {
-      'provider':     'flickholdr',
-      'defaultWidth':  '200',
+    settings = $.extend 
+      'provider':     'flickholdr'
+      'defaultWidth':  '200'
       'defaultHeight': '300'
-    }, options 
+    , options 
     
     processors =
       defaultProcessor: (callback) ->
