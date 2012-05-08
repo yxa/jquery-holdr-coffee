@@ -14,52 +14,46 @@
           if $this.is 'img'
             if !$this.attr 'src'
               emptyNodes.push $this
+              return
         callback.call @, emptyNodes
         
     providers =
       flickholdr: (emptyNodes) ->
         $(emptyNodes).each (index,item) ->
-          width   =   item.width()
-          height  =   item.height()
           keyword =   item.attr 'alt'
-          src     =   "http://#{settings.provider}.com" + 
-                                                    "/" + 
-                                                    if width then width else settings.defaultWidth +
-                                                    "/" +
-                                                    if height then height else settings.defaultHeight +
-                                                    "/" +
-                                                    if keyword then keyword else ""
+          width = if item.width() then item.width() else settings.defaultWidth
+          height = if item.height() then item.height() else settings.defaultHeight
+          src     =   "http://#{settings.provider}.com/" + width + "/" + height + "/" + if keyword then keyword else ""
                                                         
           item.attr 'src',src
           return
 
       placekitten: (emptyNodes) ->
         $(emptyNodes).each (index, item) ->
-          width   =   item.width()
-          height  =   item.height()
-          src     =   "http://#{settings.provider}.com/" +
-                                                        if width then width else settings.defaultWidth +
-                                                        "/" +
-                                                        if height then height else settings.defaultHeight +
-                                                        "/"
+          width = if item.width() then item.width() else settings.defaultWidth
+          height = if item.height() then item.height() else settings.defaultHeight
+          src     =   "http://#{settings.provider}.com/" + width + "/" + height
           item.attr 'src', src
           return
       
       robohash: (emptyNodes) ->
         $(emptyNodes).each (index, item) ->
-          width   =   item.width()
-          height  =   item.height()
+          width = if item.width() then item.width() else settings.defaultWidth
+          height = if item.height() then item.height() else settings.defaultHeight
           keyword =   item.attr 'alt'
-          set     =   "set" + Math.floor(Math.random() * (3 - 1 + 1) +1)
+          set     =   "set" + Math.floor Math.random() * (3 - 1 + 1) + 1 
           src     =   "http://#{settings.provider}.org/" +
                                                         if keyword then keyword else "random" +
                                                         ".png?set=" + set +
                                                         "&size=" +
-                                                        if width then width else settings.defaultWidth + "x" +                                                        if height then height else settings.defaultHeight
-                                                          
+                                                        width + "x" + height
           item.attr 'src', src
           return
 
     
-    if providers[settings.provider] then return processors.defaultProcessor.call @, providers[settings.provider] else processors.defaultProcessor.call @, providers['flickholdr']                                       
+    if providers[settings.provider]
+      processors.defaultProcessor.call @, providers[settings.provider] 
+    else
+      settings.provider = 'flickholdr'
+      processors.defaultProcessor.call @, providers.flickholdr
 ) jQuery
