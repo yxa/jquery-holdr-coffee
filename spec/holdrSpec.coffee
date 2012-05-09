@@ -3,7 +3,7 @@ describe 'holdr jquery plugin, coffee version', ->
     jasmine.getFixtures().fixturesPath = 'fixtures'
     loadFixtures 'imgfixture.html'
     @.addMatchers
-      toBeModified: ->  
+      toBeModified: ->
         @.actual.find("img[src='']").length == 0
 
   afterEach ->
@@ -31,7 +31,7 @@ describe 'holdr jquery plugin, coffee version', ->
     emptyImages = ($ "img[src='']")
     expect(emptyImages.length).toBe 0
 
-  it 'should be able to handle default or no placeholder site specified', ->
+  it 'should be able to handle set default placeholder site when no site specified', ->
     defaultProvider = 'http://flickholdr.com'
     emptyImages = ($ "img[src='']")
     emptyImages.holdr()
@@ -50,3 +50,45 @@ describe 'holdr jquery plugin, coffee version', ->
 
 
   it 'should be able to handle robohash as a placeholder site', ->
+    defaultProvider = 'http://robohash.org'
+    emptyImages = ($ "img[src='']")
+    emptyImages.holdr({provider: 'robohash'})
+    expect(emptyImages).toBeModified
+    emptyImages.each (index,item) ->
+      expect($(item).attr('src')).toEqual(defaultProvider + '/random.png?set=1&size=200x300')
+
+  it 'should be able to handle flickholdr as a placeholder site', ->
+    defaultProvider = 'http://flickholdr.com'
+    emptyImages = ($ "img[src='']")
+    emptyImages.holdr({provider: 'flickholdr'})
+    expect(emptyImages).toBeModified
+    emptyImages.each (index,item) ->
+      expect($(item).attr('src')).toEqual(defaultProvider + '/' + 200 + '/' + 300 + '/')
+
+  describe 'should be able to handle different width and height settings', ->
+    it 'should be able to handle flickholdr width and height settings', ->
+      defaultProvider = 'http://flickholdr.com'
+      emptyImages = ($ "img[src='']")
+      emptyImages.holdr({provider: 'flickholdr', defaultWidth: 600, defaultHeight: 700})
+      expect(emptyImages).toBeModified
+      emptyImages.each (index,item) ->
+        expect($(item).attr('src')).toEqual(defaultProvider + '/' + 600 + '/' + 700 + '/')
+
+    
+    it 'should be able to handle placekitten width and height settings', ->
+      defaultProvider = 'http://placekitten.com'
+      emptyImages = ($ "img[src='']")
+      emptyImages.holdr({provider: 'placekitten', defaultWidth: 600, defaultHeight: 700})
+      expect(emptyImages).toBeModified
+      emptyImages.each (index,item) ->
+        expect($(item).attr('src')).toEqual(defaultProvider + '/' + 600 + '/' + 700)
+
+
+    it 'should be able to handle robohash width and height settings', ->
+      defaultProvider = 'http://robohash.org'
+      emptyImages = ($ "img[src='']")
+      emptyImages.holdr({provider: 'robohash', defaultWidth: 600, defaultHeight: 700})
+      expect(emptyImages).toBeModified
+      emptyImages.each (index,item) ->
+        expect($(item).attr('src')).toEqual(defaultProvider + '/random.png?set=1&size=' + 600 + 'x' + 700)
+

@@ -37,7 +37,7 @@ describe('holdr jquery plugin, coffee version', function() {
     emptyImages = $("img[src='']");
     return expect(emptyImages.length).toBe(0);
   });
-  it('should be able to handle default or no placeholder site specified', function() {
+  it('should be able to handle set default placeholder site when no site specified', function() {
     var defaultProvider, emptyImages;
     defaultProvider = 'http://flickholdr.com';
     emptyImages = $("img[src='']");
@@ -59,5 +59,72 @@ describe('holdr jquery plugin, coffee version', function() {
       return expect($(item).attr('src')).toEqual(defaultProvider + '/' + 200 + '/' + 300);
     });
   });
-  return it('should be able to handle robohash as a placeholder site', function() {});
+  it('should be able to handle robohash as a placeholder site', function() {
+    var defaultProvider, emptyImages;
+    defaultProvider = 'http://robohash.org';
+    emptyImages = $("img[src='']");
+    emptyImages.holdr({
+      provider: 'robohash'
+    });
+    expect(emptyImages).toBeModified;
+    return emptyImages.each(function(index, item) {
+      return expect($(item).attr('src')).toEqual(defaultProvider + '/random.png?set=1&size=200x300');
+    });
+  });
+  it('should be able to handle flickholdr as a placeholder site', function() {
+    var defaultProvider, emptyImages;
+    defaultProvider = 'http://flickholdr.com';
+    emptyImages = $("img[src='']");
+    emptyImages.holdr({
+      provider: 'flickholdr'
+    });
+    expect(emptyImages).toBeModified;
+    return emptyImages.each(function(index, item) {
+      return expect($(item).attr('src')).toEqual(defaultProvider + '/' + 200 + '/' + 300 + '/');
+    });
+  });
+  return describe('should be able to handle different width and height settings', function() {
+    it('should be able to handle flickholdr width and height settings', function() {
+      var defaultProvider, emptyImages;
+      defaultProvider = 'http://flickholdr.com';
+      emptyImages = $("img[src='']");
+      emptyImages.holdr({
+        provider: 'flickholdr',
+        defaultWidth: 600,
+        defaultHeight: 700
+      });
+      expect(emptyImages).toBeModified;
+      return emptyImages.each(function(index, item) {
+        return expect($(item).attr('src')).toEqual(defaultProvider + '/' + 600 + '/' + 700 + '/');
+      });
+    });
+    it('should be able to handle placekitten width and height settings', function() {
+      var defaultProvider, emptyImages;
+      defaultProvider = 'http://placekitten.com';
+      emptyImages = $("img[src='']");
+      emptyImages.holdr({
+        provider: 'placekitten',
+        defaultWidth: 600,
+        defaultHeight: 700
+      });
+      expect(emptyImages).toBeModified;
+      return emptyImages.each(function(index, item) {
+        return expect($(item).attr('src')).toEqual(defaultProvider + '/' + 600 + '/' + 700);
+      });
+    });
+    return it('should be able to handle robohash width and height settings', function() {
+      var defaultProvider, emptyImages;
+      defaultProvider = 'http://robohash.org';
+      emptyImages = $("img[src='']");
+      emptyImages.holdr({
+        provider: 'robohash',
+        defaultWidth: 600,
+        defaultHeight: 700
+      });
+      expect(emptyImages).toBeModified;
+      return emptyImages.each(function(index, item) {
+        return expect($(item).attr('src')).toEqual(defaultProvider + '/random.png?set=1&size=' + 600 + 'x' + 700);
+      });
+    });
+  });
 });
